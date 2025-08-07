@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\StatisticController; // Import StatisticController
+
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
+});
+
+// Rute API untuk statistik
+// Mengambil semua data statistik berdasarkan tahun
+Route::get('/statistics', [StatisticController::class, 'index']);
+// Mengambil data statistik untuk kabupaten/kota tertentu dan tahun
+Route::get('/statistics/{kab_kota_name}', [StatisticController::class, 'show']);
