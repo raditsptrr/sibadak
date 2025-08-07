@@ -51,10 +51,10 @@ Sebelum memulai, pastikan Anda memiliki:
 
 1. Clone repositori ini:  
    ```bash
-   git clone https://github.com/elisaoktvna/Stunting-Apps.git
+   https://github.com/raditsptrr/sibadak.git
 2. Masuk ke projek :
 ```
-cd StuntingApps
+cd sibadak
 ```
 
 3. Install semua dependency :
@@ -77,7 +77,7 @@ php artisan key:generate
 6. Buka **.env** lalu ubah konfigurasi database sesuai yang ingin dipakai :
 ```
 DB_PORT=3306
-DB_DATABASE=db_stunting
+DB_DATABASE=sibadak_db
 DB_USERNAME=root
 DB_PASSWORD=
 ```
