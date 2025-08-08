@@ -29,7 +29,8 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+        // Mengubah pengalihan default ke halaman utama ('/')
+        return redirect()->intended('/');
     }
 
     /**

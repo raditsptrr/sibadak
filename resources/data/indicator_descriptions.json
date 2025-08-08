@@ -1,0 +1,27 @@
+{
+    "demographic": {
+        "area_sqkm": "Menyajikan data luas wilayah setiap kabupaten/kota dalam satuan kilometer persegi (km²), memberikan gambaran tentang ukuran geografis masing-masing daerah.",
+        "population": "Menampilkan total jumlah penduduk di setiap kabupaten/kota. Data ini penting untuk memahami kepadatan populasi dan distribusi demografi.",
+        "poverty_rate": "Menunjukkan persentase penduduk yang hidup di bawah garis kemiskinan di setiap daerah. Data ini merupakan indikator kunci kondisi sosial ekonomi.",
+        "labor_force": "Menjelaskan jumlah total angkatan kerja, yaitu penduduk usia produktif yang bekerja atau mencari pekerjaan, di setiap kabupaten/kota.",
+        "open_unemployment_rate": "Menyajikan persentase angkatan kerja yang tidak memiliki pekerjaan, memberikan gambaran tentang tingkat pengangguran di masing-masing wilayah.",
+        "avg_years_schooling": "Menunjukkan rata-rata lama sekolah penduduk usia tertentu. Ini adalah indikator penting untuk mengukur tingkat pendidikan dan kualitas sumber daya manusia.",
+        "literacy_rate": "Menyajikan persentase penduduk yang dapat membaca dan menulis. Data ini mencerminkan tingkat melek huruf di setiap daerah.",
+        "life_expectancy": "Menampilkan perkiraan rata-rata lama hidup penduduk sejak lahir. Indikator ini mencerminkan kondisi kesehatan dan kesejahteraan masyarakat.",
+        "infant_mortality_rate": "Menunjukkan jumlah kematian bayi (di bawah usia satu tahun) per 1.000 kelahiran hidup. Data ini adalah indikator sensitif untuk status kesehatan anak.",
+        "avg_consumption_per_capita": "Menyajikan data rata-rata pengeluaran konsumsi per kapita di setiap wilayah. Data ini sering digunakan untuk mengukur tingkat kesejahteraan ekonomi.",
+        "social_protection_coverage": "Menunjukkan persentase penduduk yang tercakup dalam program perlindungan sosial. Data ini penting untuk evaluasi program kesejahteraan pemerintah.",
+        "housing_adequacy_rate": "Menyajikan persentase rumah tangga yang menempati rumah layak huni. Ini adalah indikator kondisi pemukiman dan perumahan masyarakat."
+    },
+    "economic": {
+        "economic_growth_rate": "Menampilkan persentase pertumbuhan ekonomi di setiap kabupaten/kota. Angka ini mencerminkan seberapa cepat perekonomian lokal berkembang.",
+        "inflation_rate": "Menyajikan tingkat inflasi, yaitu kenaikan harga-harga barang dan jasa, di setiap wilayah. Inflasi memengaruhi daya beli masyarakat.",
+        "investment_value": "Menunjukkan total nilai investasi yang masuk ke setiap daerah. Data ini penting untuk mengukur kepercayaan investor dan potensi ekonomi lokal.",
+        "num_umkm": "Menampilkan total jumlah Usaha Mikro, Kecil, dan Menengah (UMKM). UMKM adalah tulang punggung perekonomian lokal.",
+        "num_cooperatives": "Menyajikan jumlah total koperasi yang terdaftar. Data ini mencerminkan tingkat partisipasi ekonomi dan kerjasama masyarakat.",
+        "grdp": "Menunjukkan Produk Domestik Regional Bruto (PDRB) di setiap wilayah. PDRB adalah nilai total barang dan jasa yang dihasilkan dalam satu tahun.",
+        "agriculture_contribution": "Menampilkan persentase kontribusi sektor pertanian terhadap PDRB. Ini adalah indikator penting untuk wilayah dengan basis ekonomi pertanian.",
+        "forestry_contribution": "Menyajikan persentase kontribusi sektor kehutanan terhadap PDRB. Data ini relevan untuk wilayah dengan sumber daya hutan yang signifikan.",
+        "fisheries_contribution": "Menunjukkan persentase kontribusi sektor perikanan terhadap PDRB. Data ini penting untuk wilayah dengan potensi perikanan yang tinggi."
+    }
+}

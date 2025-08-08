@@ -25,8 +25,8 @@
 @section('content')
     {{-- Card untuk Tabel Data --}}
     <div class="container-card">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Laporan {{ $indicatorLabel }} Tahun {{ $year }}</h1>
-        <p class="text-gray-600 mb-6">Berikut adalah data {{ strtolower($indicatorLabel) }} untuk 9 wilayah Bakorwil III Malang Raya.</p>
+        <h1 class="text-2xl font-bold text-gray-800 mb-2">Laporan {{ $indicatorLabel }} Tahun {{ $year }}</h1>
+        <p class="text-gray-600 mb-4">{{ $description }}</p> {{-- Deskripsi ditambahkan di sini --}}
 
         {{-- Tabel Data --}}
         <div class="overflow-x-auto"> {{-- Hapus mb-8 karena akan ada margin-bottom dari container-card --}}

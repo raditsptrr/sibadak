@@ -7,10 +7,8 @@
 
     <nav class="flex-grow">
         <ul class="space-y-2">
-            {{-- Dashboard --}}
             <li>
-                <a href="/" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group">
-                    {{-- Ikon Dashboard --}}
+                <a href="{{ route('map.index') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group">
                     <svg class="w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 01-8 8v-8H2z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
                     <span class="ml-3">Dashboard Peta</span>
                 </a>
@@ -19,7 +17,6 @@
             {{-- Statistik Demografi --}}
             <li>
                 <button type="button" class="collapsible-header flex items-center p-2 w-full text-gray-700 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-demografi" data-collapse-target="#dropdown-demografi">
-                    {{-- Ikon untuk Statistik Demografi (Bar Chart) --}}
                     <svg class="flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 3a1 1 0 011-1h2a1 1 0 011 1v13a1 1 0 01-1 1h-2a1 1 0 01-1-1V3z"></path></svg>
                     <span class="flex-1 ml-3 text-left whitespace-nowrap">Statistik Demografi</span>
                     <svg class="w-4 h-4 transform transition-transform duration-300 rotate-0" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -41,7 +38,6 @@
             {{-- Statistik Ekonomi --}}
             <li>
                 <button type="button" class="collapsible-header flex items-center p-2 w-full text-gray-700 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-ekonomi" data-collapse-target="#dropdown-ekonomi">
-                    {{-- Ikon untuk Statistik Ekonomi (Koin Dolar) --}}
                     <svg class="flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 100-2 1 1 0 000 2zm3 1a1 1 0 100-2 1 1 0 000 2zm3 1a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
                     <span class="flex-1 ml-3 text-left whitespace-nowrap">Statistik Ekonomi</span>
                     <svg class="w-4 h-4 transform transition-transform duration-300 rotate-0" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -62,7 +58,6 @@
             {{-- Pilih Kabupaten/Kota (Peta) --}}
             <li>
                 <button type="button" class="collapsible-header flex items-center p-2 w-full text-gray-700 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-kabkota" data-collapse-target="#dropdown-kabkota">
-                    {{-- Ikon Peta --}}
                     <svg class="flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
                     <span class="flex-1 ml-3 text-left whitespace-nowrap">Kabupaten/Kota</span>
                     <svg class="w-4 h-4 transform transition-transform duration-300 rotate-0" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
@@ -77,6 +72,22 @@
                     @endforeach
                 </ul>
             </li>
+
+            @if(Auth::check() && Auth::user()->role === 'admin')
+            <li class="mt-4 pt-4 border-t border-gray-200">
+                <button type="button" class="collapsible-header flex items-center p-2 w-full text-gray-700 rounded-lg transition duration-75 group hover:bg-gray-100" aria-controls="dropdown-admin" data-collapse-target="#dropdown-admin">
+                    <svg class="flex-shrink-0 w-5 h-5 transition duration-75 group-hover:text-gray-900" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+                    <span class="flex-1 ml-3 text-left whitespace-nowrap">Kelola Data</span>
+                    <svg class="w-4 h-4 transform transition-transform duration-300 rotate-0" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+                <ul id="dropdown-admin" class="collapsible-content py-2 space-y-1 hidden">
+                    <li><a href="{{ route('admin.forms.kabupaten_kota') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group pl-11">Input Kabupaten/Kota</a></li>
+                    <li><a href="{{ route('admin.forms.demographic') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group pl-11">Input Data Demografi</a></li>
+                    <li><a href="{{ route('admin.forms.economic') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group pl-11">Input Data Ekonomi</a></li>
+                    <li><a href="{{ route('admin.forms.user') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group pl-11">Input Data User</a></li>
+                </ul>
+            </li>
+            @endif
         </ul>
     </nav>
 
@@ -85,11 +96,6 @@
             <a href="{{ url('/dashboard') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group">
                 <span class="ml-3">Profil</span>
             </a>
-            @if(Auth::user()->role === 'admin')
-                <a href="{{ url('/admin/statistics') }}" class="flex items-center p-2 text-gray-700 rounded-lg hover:bg-gray-100 group">
-                    <span class="ml-3">Kelola Data</span>
-                </a>
-            @endif
             <form method="POST" action="{{ route('logout') }}" class="mt-2">
                 @csrf
                 <button type="submit" class="w-full text-left p-2 text-gray-700 rounded-lg hover:bg-gray-100 group">

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\DemographicStatistic;
 use App\Models\EconomicStatistic;
 use App\Models\KabupatenKota;
+use Illuminate\Support\Facades\File; // Import kelas File
 
 class ReportController extends Controller
 {
@@ -37,7 +38,7 @@ class ReportController extends Controller
             'fisheries_contribution' => 'Kontribusi Perikanan',
         ]
     ];
-
+    
     // Unit untuk setiap indikator (untuk tampilan tabel)
     private $indicatorUnits = [
         'demographic' => [
@@ -81,14 +82,13 @@ class ReportController extends Controller
         $availableYears = $demographicYears->merge($economicYears)->unique()->sortDesc()->values();
 
         // Tentukan tahun default: jika ada di query, gunakan itu. Jika tidak, gunakan tahun terbaru dari database.
-        $defaultYear = $availableYears->first(); // Tahun terbaru karena sudah di-sortDesc()
-        $year = $request->query('year', $defaultYear); // Default ke tahun terbaru dari DB
-
+        $defaultYear = $availableYears->first();
+        $year = $request->query('year', $defaultYear);
 
         $indicatorLabel = $this->indicatorLabels[$type][$indicator];
-        $indicatorUnit = $this->indicatorUnits[$type][$indicator] ?? ''; // Ambil unit, default kosong
+        $indicatorUnit = $this->indicatorUnits[$type][$indicator] ?? '';
 
-        $kabKotas = KabupatenKota::orderBy('name')->get(); // Untuk sidebar
+        $kabKotas = KabupatenKota::orderBy('name')->get();
 
         $model = null;
         if ($type === 'demographic') {
@@ -97,33 +97,36 @@ class ReportController extends Controller
             $model = new EconomicStatistic();
         }
 
-        // Pastikan model ditemukan dan indikator ada di fillable model
         if (!$model || !in_array($indicator, $model->getFillable())) {
             abort(404, 'Indikator tidak valid atau model tidak ditemukan.');
         }
 
-        // Ambil data dari database untuk tahun yang sudah ditentukan
         $rawData = $model->where('year', $year)
                          ->with('kabupatenKota')
                          ->get();
 
-        // Siapkan data untuk tabel dan chart
         $reportData = [];
         foreach ($kabKotas as $kabKota) {
-            // Cari data untuk kabupaten/kota ini
             $item = $rawData->firstWhere('kabupatenKota.name', $kabKota->name);
-            $value = $item ? $item->$indicator : null; // Ambil nilai indikator, atau null jika tidak ada
+            $value = $item ? $item->$indicator : null;
 
             $reportData[] = [
                 'kab_kota_name' => $kabKota->name,
                 'value' => $value,
             ];
         }
+        
+        // --- Bagian baru untuk memuat deskripsi dari JSON ---
+        $description = '';
+        $jsonPath = resource_path('data/indicator_descriptions.json'); // Path ke file JSON
+        if (File::exists($jsonPath)) {
+            $jsonContent = File::get($jsonPath);
+            $descriptions = json_decode($jsonContent, true);
+            $description = $descriptions[$type][$indicator] ?? 'Deskripsi tidak tersedia.';
+        }
+        // --- Akhir bagian baru ---
 
-        // Tentukan view mana yang akan digunakan
-        $viewName = 'report.index'; // Menggunakan satu view umum 'report.index'
-
-        // Pastikan $availableYears dikirimkan ke view
-        return view($viewName, compact('type', 'indicator', 'indicatorLabel', 'indicatorUnit', 'year', 'reportData', 'kabKotas', 'availableYears'));
+        $viewName = 'report.index';
+        return view($viewName, compact('type', 'indicator', 'indicatorLabel', 'indicatorUnit', 'year', 'reportData', 'kabKotas', 'availableYears', 'description'));
     }
 }
