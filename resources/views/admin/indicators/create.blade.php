@@ -1,45 +1,81 @@
-{{-- File: resources/views/admin/indicators/create.blade.php (Baru) --}}
 @extends('layouts.main_layout')
 
 @section('content')
-<div class="container-card max-w-lg mx-auto">
-    <h1 class="text-2xl font-bold text-gray-800 mb-4">Tambah Indikator Baru</h1>
+{{-- [DIUBAH] Menghapus class 'max-w-lg mx-auto' agar tidak terpusat --}}
+<div class="container-card">
+    <h1 class="text-2xl font-bold text-gray-800 mb-8">Tambah Indikator Baru</h1>
+
     <form action="{{ route('admin.indicators.store') }}" method="POST">
         @csrf
-        <div class="space-y-4">
+        <div class="space-y-6">
+            {{-- [DIUBAH] Dropdown Kategori Utama disesuaikan gayanya --}}
             <div>
-                <label for="main_category_id" class="block text-sm font-medium text-gray-700">Kategori Utama</label>
-                <select id="main_category_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                    <option value="">Pilih Kategori Utama</option>
-                    @foreach($mainCategories as $category)
-                        <option value="{{ $category->id }}">{{ $category->name }}</option>
-                    @endforeach
-                </select>
+                <label for="main_category_id" class="block text-sm font-medium text-gray-600 mb-2">Kategori Utama</label>
+                <div class="relative">
+                    <select id="main_category_id" required
+                            class="w-full bg-white border border-gray-300 rounded-lg p-3 pr-10 text-sm appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        <option value="">Pilih Kategori Utama</option>
+                        @foreach($mainCategories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
             </div>
+
+            {{-- [DIUBAH] Dropdown Sub Kategori disesuaikan gayanya --}}
             <div>
-                <label for="sub_category_id" class="block text-sm font-medium text-gray-700">Sub Kategori</label>
-                <select name="sub_category_id" id="sub_category_id" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                    <option value="">Pilih Kategori Utama dulu</option>
-                </select>
+                <label for="sub_category_id" class="block text-sm font-medium text-gray-600 mb-2">Sub Kategori</label>
+                <div class="relative">
+                    <select name="sub_category_id" id="sub_category_id" required
+                            class="w-full bg-white border border-gray-300 rounded-lg p-3 pr-10 text-sm appearance-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        <option value="">Pilih Kategori Utama dulu</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                </div>
             </div>
+
+            {{-- [DIUBAH] Input Nama Indikator disesuaikan gayanya --}}
             <div>
-                <label for="name" class="block text-sm font-medium text-gray-700">Nama Indikator</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <label for="name" class="block text-sm font-medium text-gray-600 mb-2">Nama Indikator</label>
+                <input type="text" name="name" id="name" value="{{ old('name') }}" required
+                       class="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                @error('name')
+                    <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                @enderror
             </div>
+
+            {{-- [DIUBAH] Input Satuan Unit disesuaikan gayanya --}}
             <div>
-                <label for="unit" class="block text-sm font-medium text-gray-700">Satuan Unit</label>
-                <input type="text" name="unit" id="unit" value="{{ old('unit') }}" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" placeholder="Contoh: %, jiwa, unit">
-                @error('unit') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                <label for="unit" class="block text-sm font-medium text-gray-600 mb-2">Satuan Unit</label>
+                <input type="text" name="unit" id="unit" value="{{ old('unit') }}" required
+                       placeholder="Contoh: %, jiwa, unit"
+                       class="w-full bg-white border border-gray-300 rounded-lg p-3 text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                @error('unit')
+                    <span class="text-red-500 text-xs mt-1 block">{{ $message }}</span>
+                @enderror
             </div>
         </div>
-        <div class="flex gap-4 mt-6">
-            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-700">Simpan</button>
-            <a href="{{ route('admin.indicators.index') }}" class="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg shadow hover:bg-gray-400">Batal</a>
+
+        {{-- [DIUBAH] Menyamakan gaya tombol --}}
+        <div class="flex items-center gap-6 mt-8">
+            <button type="submit" class="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all duration-200">
+                Simpan
+            </button>
+            <a href="{{ route('admin.indicators.index') }}" class="text-gray-600 font-semibold hover:text-gray-900 transition-colors duration-200">
+                Batal
+            </a>
         </div>
     </form>
 </div>
 
+@endsection
+
+{{-- Script untuk dependent dropdown tidak perlu diubah karena hanya berinteraksi dengan ID elemen --}}
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function () {
@@ -55,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
+        // Pastikan route ini ada di file web.php atau api.php Anda
         fetch(`{{ route('admin.api.sub_categories') }}?main_category_id=${mainCategoryId}`)
             .then(response => response.json())
             .then(data => {
@@ -62,9 +99,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.forEach(subCategory => {
                     subCategorySelect.add(new Option(subCategory.name, subCategory.id));
                 });
+            })
+            .catch(error => {
+                console.error('Error fetching sub-categories:', error);
+                subCategorySelect.innerHTML = '<option value="">Gagal memuat data</option>';
             });
     });
 });
 </script>
 @endpush
-@endsection

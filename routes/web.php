@@ -61,7 +61,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('main-categories', MainCategoryController::class);
         Route::resource('sub-categories', SubCategoryController::class);
         Route::resource('indicators', IndicatorController::class);
-        Route::resource('statistics', StatisticValueController::class);
+        Route::resource('statistics', StatisticValueController::class)->parameters(['statistics' => 'statisticValue']);
         Route::resource('kabupaten-kota', KabupatenKotaController::class)->except(['show']);
         Route::resource('users', UserController::class)->except(['show']);
         

@@ -1,6 +1,4 @@
 <?php
-// File: app/Http/Controllers/Admin/StatisticValueController.php (Revisi)
-// Controller ini sudah ada, kita hanya merevisi isinya
 
 namespace App\Http\Controllers\Admin;
 
@@ -60,6 +58,9 @@ class StatisticValueController extends Controller
         $kabupatenKotas = KabupatenKota::orderBy('name')->get();
         $mainCategories = MainCategory::orderBy('name')->get();
         $years = range(date('Y'), 2020);
+
+        // [PERBAIKAN DI SINI]
+        // Gunakan compact() dengan benar, dengan memasukkan semua nama variabel sebagai string.
         return view('admin.statistics.edit', compact('statisticValue', 'kabupatenKotas', 'mainCategories', 'years'));
     }
 
