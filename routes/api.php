@@ -19,8 +19,3 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-// Rute API untuk statistik
-// Mengambil semua data statistik berdasarkan tahun
-Route::get('/statistics', [StatisticController::class, 'index']);
-// Mengambil data statistik untuk kabupaten/kota tertentu dan tahun
-Route::get('/statistics/{kab_kota_name}', [StatisticController::class, 'show']);

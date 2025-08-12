@@ -10,12 +10,14 @@ class DatabaseSeeder extends Seeder
      * Seed the application's database.
      */
     public function run(): void
-    {
-        $this->call([
-            KabupatenKotaSeeder::class, // Panggil ini duluan
-            DemographicStatisticSeeder::class,
-            EconomicStatisticSeeder::class,
-            
-        ]);
-    }
+{
+    $this->call([
+        AdminUserSeeder::class,
+        KabupatenKotaSeeder::class,
+        KabupatenKotaSeeder::class,
+        CategoryIndicatorSeeder::class,
+        StatisticValueSeeder::class, // Tambahkan ini di akhir
+    ]);
+    
+}
 }

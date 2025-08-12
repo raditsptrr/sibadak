@@ -3,52 +3,102 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\KabupatenKota;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules;
+use Illuminate\Validation\Rule; // <-- REVISI 1: Tambahkan import untuk Rule
 
 class UserController extends Controller
 {
     /**
-     * Tampilkan form untuk menambah data User.
-     * Mengambil data kabupaten/kota untuk sidebar.
-     *
-     * @return \Illuminate\View\View
+     * Menampilkan daftar semua user.
      */
-    public function showForm()
+    public function index()
     {
-        // Variabel ini diperlukan untuk sidebar
-        $kabKotas = KabupatenKota::orderBy('name')->get();
-        return view('admin.forms.user', compact('kabKotas'));
+        $users = User::orderBy('name')->paginate(10);
+        return view('admin.users.index', compact('users'));
     }
-    
+
     /**
-     * Metode untuk menyimpan data dari form.
-     * Melakukan validasi, hashing password, dan menyimpan user baru.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\RedirectResponse
+     * Menampilkan form untuk membuat user baru.
+     */
+    public function create()
+    {
+        return view('admin.users.create');
+    }
+
+    /**
+     * Menyimpan user baru ke database.
      */
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|in:user,admin',
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:'.User::class],
+            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:user,admin'],
         ]);
-        
-        // Buat user baru di database
+
         User::create([
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')), // Gunakan Hash::make() untuk mengamankan password
-            'role' => $request->input('role'),
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role,
         ]);
-        
-        // Redirect kembali ke halaman form dengan pesan sukses
-        return redirect()->route('admin.forms.user')->with('success', 'User berhasil ditambahkan!');
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil ditambahkan.');
+    }
+
+    /**
+     * Menampilkan form untuk mengedit user.
+     */
+    public function edit(User $user)
+    {
+        return view('admin.users.edit', compact('user'));
+    }
+
+    /**
+     * Memperbarui user di database.
+     */
+    public function update(Request $request, User $user)
+    {
+        // --- MULAI REVISI 2 ---
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore($user->id), // Ini adalah cara yang benar
+            ],
+            'role' => ['required', 'in:user,admin'],
+            'password' => ['nullable', 'confirmed', Rules\Password::defaults()],
+        ]);
+        // --- SELESAI REVISI 2 ---
+
+        $userData = $request->only('name', 'email', 'role');
+        if ($request->filled('password')) {
+            $userData['password'] = Hash::make($request->password);
+        }
+
+        $user->update($userData);
+
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil diperbarui.');
+    }
+
+    /**
+     * Menghapus user dari database.
+     */
+    public function destroy(User $user)
+    {
+        // Mencegah admin menghapus dirinya sendiri
+        if ($user->id === auth()->id()) {
+            return redirect()->route('admin.users.index')->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        $user->delete();
+        return redirect()->route('admin.users.index')->with('success', 'User berhasil dihapus.');
     }
 }

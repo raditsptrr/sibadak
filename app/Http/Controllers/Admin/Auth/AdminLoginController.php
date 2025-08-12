@@ -15,7 +15,8 @@ class AdminLoginController extends Controller
     {
         // Jika sudah login sebagai admin, langsung redirect
         if (Auth::check() && Auth::user()->role === 'admin') {
-            return redirect()->route('map.index');
+            // Kode yang benar
+        return redirect()->intended(route('dashboard'));
         }
         return view('auth.login'); // Menggunakan view login bawaan Breeze
     }
@@ -34,7 +35,8 @@ class AdminLoginController extends Controller
             // Periksa peran setelah otentikasi berhasil
             if (Auth::user()->role === 'admin') {
                 $request->session()->regenerate();
-                return redirect()->intended(route('map.index')); // Mengarahkan admin ke halaman utama
+                // Kode yang benar
+return redirect()->intended(route('dashboard')); // Mengarahkan admin ke halaman utama
             }
 
             // Jika otentikasi berhasil tapi bukan admin, logout dan beri pesan error

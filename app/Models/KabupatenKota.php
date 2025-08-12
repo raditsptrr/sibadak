@@ -4,35 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class KabupatenKota extends Model
 {
     use HasFactory;
 
-    // Nama tabel jika tidak sesuai konvensi Laravel (plural dari nama model)
-    // Dalam kasus ini, kita menggunakan 'kabupatens_kota'
+    /**
+     * Nama tabel yang terhubung dengan model.
+     *
+     * @var string
+     */
     protected $table = 'kabupatens_kota';
 
-    // Kolom yang bisa diisi secara massal (mass assignable)
+    /**
+     * Atribut yang dapat diisi secara massal.
+     *
+     * @var array
+     */
     protected $fillable = [
         'name',
     ];
 
     /**
-     * Relasi ke data statistik demografi.
-     * Sebuah KabupatenKota bisa memiliki banyak DemographicStatistic.
+     * Mendefinisikan relasi one-to-many ke StatisticValue.
+     * Satu kabupaten/kota memiliki banyak nilai statistik.
      */
-    public function demographicStatistics()
+    public function statisticValues(): HasMany
     {
-        return $this->hasMany(DemographicStatistic::class, 'kab_kota_id');
-    }
-
-    /**
-     * Relasi ke data statistik ekonomi.
-     * Sebuah KabupatenKota bisa memiliki banyak EconomicStatistic.
-     */
-    public function economicStatistics()
-    {
-        return $this->hasMany(EconomicStatistic::class, 'kab_kota_id');
+        return $this->hasMany(StatisticValue::class, 'kab_kota_id');
     }
 }

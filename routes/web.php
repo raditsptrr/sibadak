@@ -1,60 +1,75 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\MapController;
+// Import Controller Baru & yang Relevan
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReportController;
-use App\Http\Controllers\Admin\KabupatenKotaController;
-use App\Http\Controllers\Admin\DemographicController;
-use App\Http\Controllers\Admin\EconomicController;
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\StatisticController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\DashboardApiController;
+use App\Http\Controllers\Admin\MainCategoryController;
+use App\Http\Controllers\Admin\SubCategoryController;
+use App\Http\Controllers\Admin\IndicatorController;
+use App\Http\Controllers\Admin\StatisticValueController;
+use App\Http\Controllers\Admin\DataApiController as AdminDataApiController;
 use App\Http\Controllers\Admin\Auth\AdminLoginController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\KabupatenKotaController;
+use App\Http\Controllers\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
 | Web Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
+| File ini mendefinisikan semua route yang dapat diakses melalui browser.
 |
 */
 
-// Rute Publik (dapat diakses oleh siapa pun)
-Route::get('/', [MapController::class, 'index'])->name('map.index');
-Route::get('/report/{type}/{indicator}', [ReportController::class, 'show'])->name('report.show');
+// Rute Halaman Utama (Publik)
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
-// Rute untuk Halaman Login Admin (tidak perlu middleware admin)
+// Route Baru untuk Halaman Laporan Detail
+Route::get('/report/sub-category/{subCategory}', [ReportController::class, 'show'])->name('report.show');
+
+// Route API Internal (diletakkan di web.php agar mendapat session, dll)
+Route::prefix('api')->name('api.')->group(function () {
+    Route::get('/dashboard-data', [DashboardApiController::class, 'getData'])->name('dashboard.data');
+    Route::get('/report-data', [ReportController::class, 'getReportData'])->name('report.data');
+});
+
+// Rute untuk user profile (bawaan Breeze)
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+// === GRUP ROUTE ADMIN ===
 Route::prefix('admin')->name('admin.')->group(function () {
+    
+    // Rute Login & Logout Admin (Publik)
     Route::get('/login', [AdminLoginController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AdminLoginController::class, 'login'])->name('login.post');
     Route::post('/logout', [AdminLoginController::class, 'logout'])->name('logout');
+
+    // Rute yang Dilindungi Middleware Admin
+    Route::middleware(['auth', 'admin'])->group(function () {
+        
+        // Arahkan dashboard admin ke halaman kelola statistik
+        Route::get('/', [StatisticValueController::class, 'index'])->name('dashboard');
+
+        // Resourceful Route untuk semua menu Kelola Data
+        Route::resource('main-categories', MainCategoryController::class);
+        Route::resource('sub-categories', SubCategoryController::class);
+        Route::resource('indicators', IndicatorController::class);
+        Route::resource('statistics', StatisticValueController::class);
+        Route::resource('kabupaten-kota', KabupatenKotaController::class)->except(['show']);
+        Route::resource('users', UserController::class)->except(['show']);
+        
+        // Rute untuk API dinamis di form admin
+        Route::get('/api/sub-categories', [AdminDataApiController::class, 'getSubCategories'])->name('api.sub_categories');
+        Route::get('/api/indicators', [AdminDataApiController::class, 'getIndicators'])->name('api.indicators');
+    });
 });
 
-// Rute Group untuk Halaman Admin (dilindungi oleh middleware)
-Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
-    // Rute utama dashboard admin
-    Route::get('/', [AdminController::class, 'index'])->name('index');
-    
-    // Rute untuk mengelola data statistik (CRUD)
-    Route::get('/statistics', [StatisticController::class, 'index'])->name('statistics.index');
-    Route::get('/statistics/create', [StatisticController::class, 'create'])->name('statistics.create');
-    Route::post('/statistics', [StatisticController::class, 'store'])->name('statistics.store');
-    Route::get('/statistics/{statistic}/edit', [StatisticController::class, 'edit'])->name('statistics.edit');
-    Route::put('/statistics/{statistic}', [StatisticController::class, 'update'])->name('statistics.update');
-    Route::delete('/statistics/{statistic}', [StatisticController::class, 'destroy'])->name('statistics.destroy');
-    
-    // Rute untuk form input data
-    Route::get('/forms/kabupaten-kota', [KabupatenKotaController::class, 'showForm'])->name('forms.kabupaten_kota');
-    Route::post('/forms/kabupaten-kota', [KabupatenKotaController::class, 'store'])->name('forms.kabupaten_kota.store');
-    Route::get('/forms/demographic', [DemographicController::class, 'showForm'])->name('forms.demographic');
-    Route::post('/forms/demographic', [DemographicController::class, 'store'])->name('forms.demographic.store');
-    Route::get('/forms/economic', [EconomicController::class, 'showForm'])->name('forms.economic');
-    Route::post('/forms/economic', [EconomicController::class, 'store'])->name('forms.economic.store');
-    Route::get('/forms/user', [UserController::class, 'showForm'])->name('forms.user');
-    Route::post('/forms/user', [UserController::class, 'store'])->name('forms.user.store');
-});
-
+// Memuat rute otentikasi bawaan Breeze
 require __DIR__.'/auth.php';
